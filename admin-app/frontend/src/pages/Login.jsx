@@ -48,18 +48,23 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-indigo-100 via-white to-primary-50 p-4">
-      <div className="w-full max-w-md animate-slide-up">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-600 to-indigo-800 shadow-xl shadow-primary-200 mb-4 transform -rotate-6 hover:rotate-0 transition-transform duration-300">
+    <div className="relative min-h-screen flex items-center justify-center bg-gray-50 overflow-hidden p-4">
+      {/* Background Blobs */}
+      <div className="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] rounded-full bg-primary-200/50 mix-blend-multiply filter blur-3xl opacity-70 animate-pulse-glow" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-indigo-200/50 mix-blend-multiply filter blur-3xl opacity-70 animate-pulse-glow" style={{ animationDelay: '1s' }} />
+
+      <div className="relative z-10 w-full max-w-md animate-slide-up">
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-600 to-indigo-800 shadow-xl shadow-primary-200/50 mb-6 transform -rotate-6 hover:rotate-0 transition-transform duration-300">
             <School className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Elevanda Admin</h1>
-          <p className="text-sm text-gray-500 mt-2 font-medium">Secure School Management Portal</p>
+          <h1 className="text-4xl font-black text-gray-900 tracking-tight">Elevanda Admin</h1>
+          <p className="text-sm text-gray-500 mt-2 font-medium uppercase tracking-widest">Secure Management Portal</p>
         </div>
 
-        <Card className="shadow-2xl shadow-indigo-100/50 border-0 ring-1 ring-gray-100 backdrop-blur-xl bg-white/90">
-          <CardBody className="p-8">
+        <div className="bg-white/70 backdrop-blur-2xl shadow-2xl shadow-indigo-100/50 rounded-2xl border border-white/50 p-8 relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 to-indigo-500" />
+
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none mt-6">
@@ -99,10 +104,9 @@ export default function Login() {
                 Sign into Portal
               </Button>
             </form>
-          </CardBody>
-        </Card>
+        </div>
         
-        <p className="text-center text-xs text-gray-400 mt-8">
+        <p className="text-center text-xs text-gray-400 mt-8 font-medium">
           &copy; {new Date().getFullYear()} Elevanda Ventures. All rights reserved.
         </p>
       </div>
