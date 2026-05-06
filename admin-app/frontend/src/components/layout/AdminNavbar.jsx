@@ -31,9 +31,9 @@ export default function AdminNavbar({ onMenuToggle }) {
             <Bell className="w-5 h-5" />
             <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
           </button>
-          
+
           <div className="h-8 w-px bg-gray-200 mx-2"></div>
-          
+
           <div className="flex items-center gap-3">
             <div className="hidden sm:block text-right">
               <p className="text-sm font-bold text-gray-900 leading-tight">{admin?.name}</p>

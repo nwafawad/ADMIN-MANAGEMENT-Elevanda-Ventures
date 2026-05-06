@@ -63,7 +63,8 @@ export default function ClassDetail() {
       queryClient.invalidateQueries(['class', id]);
       queryClient.invalidateQueries(['allStudents']);
       toast.success('Student added');
-    }
+    },
+    onError: (err) => toast.error(err.response?.data?.message || 'Failed to add student')
   });
 
   const removeStudentMutation = useMutation({

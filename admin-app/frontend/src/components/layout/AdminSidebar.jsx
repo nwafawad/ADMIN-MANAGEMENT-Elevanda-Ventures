@@ -48,7 +48,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
           {navItems.map((item) => {
             const isActive = location.pathname.startsWith(item.path);
             const Icon = item.icon;
-            
+
             return (
               <Link
                 key={item.path}

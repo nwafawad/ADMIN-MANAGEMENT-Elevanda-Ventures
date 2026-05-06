@@ -78,7 +78,8 @@ export default function UserDetail() {
     onSuccess: () => {
       queryClient.invalidateQueries(['user', id]);
       toast.success('Class assigned successfully');
-    }
+    },
+    onError: (err) => toast.error(err.response?.data?.message || 'Failed to assign class')
   });
 
   const linkChildMutation = useMutation({

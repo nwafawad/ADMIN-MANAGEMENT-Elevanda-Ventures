@@ -72,59 +72,48 @@ const getStats = async () => {
  * Uses MongoDB session for atomicity.
  */
 const approveTransaction = async (transactionId, adminId) => {
-  const session = await mongoose.startSession();
-  session.startTransaction();
+  const transaction = await FeeTransaction.findById(transactionId);
 
-  try {
-    const transaction = await FeeTransaction.findById(transactionId).session(session);
-
-    if (!transaction) {
-      throw Object.assign(new Error('Transaction not found'), { statusCode: 404 });
-    }
-
-    if (transaction.status !== 'pending') {
-      throw Object.assign(new Error('Transaction is not pending'), { statusCode: 400 });
-    }
-
-    transaction.status = 'approved';
-    transaction.processedBy = adminId;
-
-    if (transaction.type === 'deposit') {
-      // Find or create FeeBalance, then increment
-      let balance = await FeeBalance.findOne({ userId: transaction.userId }).session(session);
-      if (!balance) {
-        balance = new FeeBalance({ userId: transaction.userId, balance: 0 });
-      }
-      balance.balance += transaction.amount;
-      await balance.save({ session });
-    } else if (transaction.type === 'withdraw') {
-      const balance = await FeeBalance.findOne({ userId: transaction.userId }).session(session);
-      if (!balance || balance.balance < transaction.amount) {
-        throw Object.assign(new Error('Insufficient balance for withdrawal'), { statusCode: 400 });
-      }
-      balance.balance -= transaction.amount;
-      await balance.save({ session });
-    }
-
-    await transaction.save({ session });
-    await session.commitTransaction();
-
-    const populated = await FeeTransaction.findById(transactionId)
-      .populate('userId', 'name email')
-      .populate('processedBy', 'name');
-
-    const userBalance = await FeeBalance.findOne({ userId: transaction.userId });
-
-    return {
-      transaction: toFeeDto(populated),
-      newBalance: userBalance?.balance || 0,
-    };
-  } catch (error) {
-    await session.abortTransaction();
-    throw error;
-  } finally {
-    session.endSession();
+  if (!transaction) {
+    throw Object.assign(new Error('Transaction not found'), { statusCode: 404 });
   }
+
+  if (transaction.status !== 'pending') {
+    throw Object.assign(new Error('Transaction is not pending'), { statusCode: 400 });
+  }
+
+  transaction.status = 'approved';
+  transaction.processedBy = adminId;
+
+  if (transaction.type === 'deposit') {
+    // Find or create FeeBalance, then increment
+    let balance = await FeeBalance.findOne({ userId: transaction.userId });
+    if (!balance) {
+      balance = new FeeBalance({ userId: transaction.userId, balance: 0 });
+    }
+    balance.balance += transaction.amount;
+    await balance.save();
+  } else if (transaction.type === 'withdraw') {
+    const balance = await FeeBalance.findOne({ userId: transaction.userId });
+    if (!balance || balance.balance < transaction.amount) {
+      throw Object.assign(new Error('Insufficient balance for withdrawal'), { statusCode: 400 });
+    }
+    balance.balance -= transaction.amount;
+    await balance.save();
+  }
+
+  await transaction.save();
+
+  const populated = await FeeTransaction.findById(transactionId)
+    .populate('userId', 'name email')
+    .populate('processedBy', 'name');
+
+  const userBalance = await FeeBalance.findOne({ userId: transaction.userId });
+
+  return {
+    transaction: toFeeDto(populated),
+    newBalance: userBalance?.balance || 0,
+  };
 };
 
 /**
