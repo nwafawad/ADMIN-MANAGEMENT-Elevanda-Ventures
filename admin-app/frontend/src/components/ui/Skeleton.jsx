@@ -24,7 +24,7 @@ export function SkeletonCard({ className = '' }) {
 export function SkeletonTable({ rows = 5, cols = 4 }) {
   return (
     <div className="space-y-2">
-      <div className="flex gap-4 p-3 border-b border-gray-100">
+      <div className="flex gap-4 p-3">
         {Array.from({ length: cols }).map((_, i) => (
           <div key={i} className="skeleton h-4 flex-1" />
         ))}

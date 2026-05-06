@@ -6,22 +6,18 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
     md: 'max-w-md',
     lg: 'max-w-lg',
     xl: 'max-w-xl',
-    '2xl': 'max-w-2xl',
   };
 
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
-      const handleEsc = (e) => {
-        if (e.key === 'Escape') onClose();
-      };
-      window.addEventListener('keydown', handleEsc);
-      return () => {
-        document.body.style.overflow = '';
-        window.removeEventListener('keydown', handleEsc);
-      };
+    } else {
+      document.body.style.overflow = '';
     }
-  }, [isOpen, onClose]);
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -36,11 +32,11 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
       <div
         className={`
           relative bg-white rounded-xl shadow-xl w-full ${sizes[size]}
-          animate-slide-up max-h-[90vh] flex flex-col
+          animate-fade-in
         `}
       >
         {/* Header */}
-        <div className="flex flex-shrink-0 items-center justify-between px-6 py-4 border-b border-gray-100">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
           <button
             onClick={onClose}
@@ -52,7 +48,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
           </button>
         </div>
         {/* Body */}
-        <div className="p-6 overflow-y-auto">{children}</div>
+        <div className="px-6 py-4">{children}</div>
       </div>
     </div>
   );

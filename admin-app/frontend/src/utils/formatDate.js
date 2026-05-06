@@ -14,3 +14,4 @@ export const formatDate = (dateString, showTime = false) => {
 
   return new Intl.DateTimeFormat('en-US', options).format(new Date(dateString));
 };
+export const formatDateTime = (dateString) => formatDate(dateString, true);
