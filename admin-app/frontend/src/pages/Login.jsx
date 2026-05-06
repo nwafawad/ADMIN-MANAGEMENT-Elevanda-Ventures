@@ -58,8 +58,8 @@ export default function Login() {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-600 to-indigo-800 shadow-xl shadow-primary-200/50 mb-6 transform -rotate-6 hover:rotate-0 transition-transform duration-300">
             <School className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-4xl font-black text-gray-900 tracking-tight">Elevanda Admin</h1>
-          <p className="text-sm text-gray-500 mt-2 font-medium uppercase tracking-widest">Secure Management Portal</p>
+          <h1 className="text-4xl font-black text-gray-900 tracking-tight">Elevanda Ventures</h1>
+          <p className="text-sm text-gray-500 mt-2 font-medium uppercase tracking-widest">Admin Portal - Kigali, Rwanda</p>
         </div>
 
         <div className="bg-white/70 backdrop-blur-2xl shadow-2xl shadow-indigo-100/50 rounded-2xl border border-white/50 p-8 relative overflow-hidden">

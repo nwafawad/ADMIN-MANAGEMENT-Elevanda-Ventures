@@ -45,7 +45,7 @@ export default function UnverifiedDevicesList() {
         )}
       </CardHeader>
       <CardBody className="p-0">
-        {users?.length === 0 ? (
+        {!users || users.length === 0 ? (
           <div className="p-6 text-center text-sm text-gray-500">
             All user devices are verified.
           </div>
@@ -64,7 +64,7 @@ export default function UnverifiedDevicesList() {
                   onClick={() => verifyMutation.mutate(user.id)}
                   loading={verifyMutation.isPending && verifyMutation.variables === user.id}
                 >
-                  Verify Now
+                  Quick Verify
                 </Button>
               </div>
             ))}

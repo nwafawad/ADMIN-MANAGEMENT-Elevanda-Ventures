@@ -2,22 +2,18 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import Card, { CardHeader, CardBody } from '../ui/Card';
 
 export default function FeeChart({ data }) {
-  // Mock monthly breakdown since we only have aggregated totals from the endpoint.
-  // In a real app, the backend would return a month-by-month array.
-  // We'll simulate 6 months for visual purposes.
   const chartData = [
-    { name: 'Oct', deposits: Math.floor(data.totalFeeCollected * 0.1), withdrawals: Math.floor(data.totalFeeWithdrawn * 0.1) },
-    { name: 'Nov', deposits: Math.floor(data.totalFeeCollected * 0.15), withdrawals: Math.floor(data.totalFeeWithdrawn * 0.12) },
-    { name: 'Dec', deposits: Math.floor(data.totalFeeCollected * 0.12), withdrawals: Math.floor(data.totalFeeWithdrawn * 0.15) },
-    { name: 'Jan', deposits: Math.floor(data.totalFeeCollected * 0.2), withdrawals: Math.floor(data.totalFeeWithdrawn * 0.18) },
-    { name: 'Feb', deposits: Math.floor(data.totalFeeCollected * 0.18), withdrawals: Math.floor(data.totalFeeWithdrawn * 0.2) },
-    { name: 'Mar', deposits: Math.floor(data.totalFeeCollected * 0.25), withdrawals: Math.floor(data.totalFeeWithdrawn * 0.25) },
+    {
+      name: 'Totals',
+      deposits: data.totalFeeCollected,
+      withdrawals: data.totalFeeWithdrawn,
+    },
   ];
 
   return (
     <Card>
       <CardHeader>
-        <h3 className="font-semibold text-gray-900">Fee Cashflow (6 Months)</h3>
+        <h3 className="font-semibold text-gray-900">Fee Cashflow</h3>
       </CardHeader>
       <CardBody>
         <div className="h-72 w-full mt-4">

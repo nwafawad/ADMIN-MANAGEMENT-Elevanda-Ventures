@@ -10,8 +10,10 @@ import Select from '../components/ui/Select';
 import Modal from '../components/ui/Modal';
 import { formatDate } from '../utils/formatDate';
 import toast from 'react-hot-toast';
-import { BookOpen, UserCheck, CalendarDays, Search } from 'lucide-react';
+import { BookOpen, UserCheck, CalendarDays, Search, Users } from 'lucide-react';
 import { gradeSchema, attendanceSchema } from '../schemas/academicSchema';
+import Badge from '../components/ui/Badge';
+import { computeGrade, gradeColorMap } from '../utils/gradeCompute';
 
 export default function Academics() {
   const queryClient = useQueryClient();
@@ -26,9 +28,12 @@ export default function Academics() {
   const [isBulkAttendanceOpen, setIsBulkAttendanceOpen] = useState(false);
 
   // Forms
-  const { register: regGrade, handleSubmit: handleGradeSubmit, reset: resetGrade, formState: { errors: gradeErrors } } = useForm({
+  const { register: regGrade, handleSubmit: handleGradeSubmit, reset: resetGrade, watch: watchGrade, formState: { errors: gradeErrors } } = useForm({
     resolver: zodResolver(gradeSchema),
   });
+    const watchedScore = watchGrade('score');
+    const computedGrade = Number.isFinite(watchedScore) ? computeGrade(watchedScore) : null;
+
   
   const { register: regAtt, handleSubmit: handleAttSubmit, reset: resetAtt, formState: { errors: attErrors } } = useForm({
     resolver: zodResolver(attendanceSchema),
@@ -214,6 +219,15 @@ export default function Academics() {
           <div className="grid grid-cols-2 gap-4">
             <Input label="Score (0-100)" type="number" {...regGrade('score', { valueAsNumber: true })} error={gradeErrors.score?.message} />
             <Input label="Term/Semester" {...regGrade('term')} error={gradeErrors.term?.message} placeholder="e.g. Term 1" />
+          </div>
+          <div className="flex items-center justify-between rounded-lg border border-gray-100 bg-gray-50 px-3 py-2">
+            <div>
+              <p className="text-xs uppercase tracking-wider text-gray-500">Letter Grade</p>
+              <p className="text-xs text-gray-400">A &gt;= 80, B &gt;= 70, C &gt;= 60, D &gt;= 50</p>
+            </div>
+            <Badge color={computedGrade ? gradeColorMap[computedGrade] : 'gray'}>
+              {computedGrade || 'N/A'}
+            </Badge>
           </div>
           <div className="pt-4 flex justify-end gap-3">
             <Button variant="ghost" onClick={() => setIsGradeModalOpen(false)}>Cancel</Button>

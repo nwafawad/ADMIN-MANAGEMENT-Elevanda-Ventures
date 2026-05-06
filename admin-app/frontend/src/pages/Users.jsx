@@ -29,8 +29,10 @@ export default function Users() {
     return res.data.data;
   };
 
+  const usersQueryKey = ['users', page, search, roleFilter, verificationFilter];
+
   const { data, isLoading } = useQuery({
-    queryKey: ['users', page, search, roleFilter, verificationFilter],
+    queryKey: usersQueryKey,
     queryFn: fetchUsers,
     keepPreviousData: true,
   });
@@ -39,8 +41,29 @@ export default function Users() {
     mutationFn: async ({ id, verified }) => {
       await api.patch(`/users/${id}/verify-device`, { verified });
     },
+    onMutate: async ({ id, verified }) => {
+      await queryClient.cancelQueries({ queryKey: usersQueryKey });
+      const previous = queryClient.getQueryData(usersQueryKey);
+
+      queryClient.setQueryData(usersQueryKey, (old) => {
+        if (!old) return old;
+        return {
+          ...old,
+          users: old.users.map((user) =>
+            user.id === id ? { ...user, isDeviceVerified: verified } : user
+          ),
+        };
+      });
+
+      return { previous };
+    },
+    onError: (err, _vars, context) => {
+      if (context?.previous) queryClient.setQueryData(usersQueryKey, context.previous);
+      toast.error(err.response?.data?.message || 'Failed to update device status');
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries(['users']);
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+      queryClient.invalidateQueries({ queryKey: ['pendingVerifications'] });
       toast.success('Device status updated');
     },
   });

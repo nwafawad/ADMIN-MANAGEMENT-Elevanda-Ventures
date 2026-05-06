@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Trash2 } from 'lucide-react';
 
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
@@ -10,7 +11,7 @@ const dayColors = {
   Friday: 'from-teal-500 to-teal-600',
 };
 
-export default function TimetableGrid({ timetable }) {
+export default function TimetableGrid({ timetable, onDelete }) {
   const [expandedDay, setExpandedDay] = useState(null);
 
   if (!timetable || Object.keys(timetable).length === 0) {
@@ -41,12 +42,25 @@ export default function TimetableGrid({ timetable }) {
               ) : (
                 (timetable[day] || []).map((entry, i) => (
                   <div
-                    key={i}
+                    key={entry.id || i}
                     className="bg-white border border-gray-100 rounded-lg p-3 hover:shadow-sm hover:border-gray-200 transition-all duration-200"
                   >
-                    <p className="text-sm font-semibold text-gray-900">{entry.subject}</p>
-                    <p className="text-xs text-gray-500 mt-1">{entry.teacherName}</p>
-                    <p className="text-xs text-primary-600 font-medium mt-1">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="text-sm font-semibold text-gray-900">{entry.subject}</p>
+                        <p className="text-xs text-gray-500 mt-1">{entry.teacherName || 'TBA'}</p>
+                      </div>
+                      {onDelete && entry.id && (
+                        <button
+                          onClick={() => onDelete(entry.id)}
+                          className="text-gray-400 hover:text-red-600 transition-colors"
+                          title="Delete slot"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+                    <p className="text-xs text-primary-600 font-medium mt-2">
                       {entry.startTime} – {entry.endTime}
                     </p>
                   </div>
@@ -76,14 +90,27 @@ export default function TimetableGrid({ timetable }) {
                   <p className="text-sm text-gray-400 text-center py-2">No classes scheduled</p>
                 ) : (
                   (timetable[day] || []).map((entry, i) => (
-                    <div key={i} className="bg-gray-50 rounded-lg p-3">
-                      <p className="text-sm font-semibold text-gray-900">{entry.subject}</p>
-                      <p className="text-xs text-gray-500">{entry.teacherName}</p>
-                      <p className="text-xs text-primary-600 font-medium mt-1">
-                        {entry.startTime} – {entry.endTime}
-                      </p>
-                    </div>
-                  ))
+                      <div key={entry.id || i} className="bg-gray-50 rounded-lg p-3">
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <p className="text-sm font-semibold text-gray-900">{entry.subject}</p>
+                            <p className="text-xs text-gray-500">{entry.teacherName || 'TBA'}</p>
+                          </div>
+                          {onDelete && entry.id && (
+                            <button
+                              onClick={() => onDelete(entry.id)}
+                              className="text-gray-400 hover:text-red-600 transition-colors"
+                              title="Delete slot"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          )}
+                        </div>
+                        <p className="text-xs text-primary-600 font-medium mt-2">
+                          {entry.startTime} – {entry.endTime}
+                        </p>
+                      </div>
+                    ))
                 )}
               </div>
             )}

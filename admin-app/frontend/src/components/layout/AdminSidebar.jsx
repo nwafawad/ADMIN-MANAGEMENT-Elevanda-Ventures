@@ -26,7 +26,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
       {/* Sidebar */}
       <aside
         className={`
-          fixed top-0 left-0 z-50 h-full w-64 bg-indigo-950 border-r border-indigo-900
+          fixed top-0 left-0 z-50 h-full w-64 bg-indigo-900 border-r border-indigo-800
           transform transition-transform duration-300 ease-in-out
           lg:translate-x-0 lg:static lg:z-auto shadow-xl
           ${isOpen ? 'translate-x-0' : '-translate-x-full'}

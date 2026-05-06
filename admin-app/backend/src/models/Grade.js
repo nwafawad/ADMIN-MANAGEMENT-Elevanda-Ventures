@@ -41,12 +41,12 @@ const gradeSchema = new mongoose.Schema(
   }
 );
 
-// Compute grade from score before saving — matches client app grading scale
+// Compute grade from score before saving — matches the admin grading scale
 gradeSchema.pre('save', function (next) {
-  if (this.score >= 90) this.grade = 'A';
-  else if (this.score >= 80) this.grade = 'B';
-  else if (this.score >= 70) this.grade = 'C';
-  else if (this.score >= 60) this.grade = 'D';
+  if (this.score >= 80) this.grade = 'A';
+  else if (this.score >= 70) this.grade = 'B';
+  else if (this.score >= 60) this.grade = 'C';
+  else if (this.score >= 50) this.grade = 'D';
   else this.grade = 'F';
   next();
 });

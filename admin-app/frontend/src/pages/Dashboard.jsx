@@ -64,7 +64,7 @@ export default function Dashboard() {
           <RecentActivityFeed transactions={data.recentTransactions} registrations={data.recentRegistrations} />
         </div>
         <div className="space-y-8">
-          <AttendanceChart rate={data.attendanceRate} />
+          <AttendanceChart summary={data.attendanceSummary} rate={data.attendanceRate} />
           <UnverifiedDevicesList />
         </div>
       </div>

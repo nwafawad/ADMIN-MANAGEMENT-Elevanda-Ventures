@@ -10,7 +10,7 @@ const getStats = async () => {
   const [
     totalStudents, totalTeachers, totalParents, totalClasses,
     depositAgg, withdrawAgg, pendingTransactions, unverifiedDevices,
-    totalAttendance, presentCount,
+    totalAttendance, presentCount, absentCount, lateCount,
     recentTxns, recentUsers,
   ] = await Promise.all([
     User.countDocuments({ role: 'student' }),
@@ -23,6 +23,8 @@ const getStats = async () => {
     User.countDocuments({ isDeviceVerified: false, role: { $ne: 'admin' } }),
     Attendance.countDocuments(),
     Attendance.countDocuments({ status: 'present' }),
+    Attendance.countDocuments({ status: 'absent' }),
+    Attendance.countDocuments({ status: 'late' }),
     FeeTransaction.find().populate('userId', 'name email').sort({ createdAt: -1 }).limit(5),
     User.find({ role: { $ne: 'admin' } }).sort({ createdAt: -1 }).limit(5),
   ]);
@@ -34,6 +36,13 @@ const getStats = async () => {
     totalFeeCollected: depositAgg[0]?.total || 0,
     totalFeeWithdrawn: withdrawAgg[0]?.total || 0,
     pendingTransactions, unverifiedDevices, attendanceRate,
+    attendanceSummary: {
+      total: totalAttendance,
+      present: presentCount,
+      absent: absentCount,
+      late: lateCount,
+      attendanceRate,
+    },
     recentTransactions: recentTxns.map(toFeeDto),
     recentRegistrations: recentUsers.map(toUserDto),
   });

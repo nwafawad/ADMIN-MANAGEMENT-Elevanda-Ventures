@@ -1,6 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
@@ -11,6 +11,7 @@ import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import Select from '../components/ui/Select';
 import Modal from '../components/ui/Modal';
+import TimetableGrid from '../components/academics/TimetableGrid';
 import { ArrowLeft, School, GraduationCap, Users, CalendarDays, Plus, Trash2, ShieldCheck, ShieldAlert } from 'lucide-react';
 import { timetableSchema } from '../schemas/academicSchema';
 
@@ -92,6 +93,20 @@ export default function ClassDetail() {
       toast.success('Slot deleted');
     }
   });
+
+  const timetableByDay = useMemo(() => {
+    const grouped = {
+      Monday: [],
+      Tuesday: [],
+      Wednesday: [],
+      Thursday: [],
+      Friday: [],
+    };
+    (classData?.timetable || []).forEach((entry) => {
+      if (grouped[entry.dayOfWeek]) grouped[entry.dayOfWeek].push(entry);
+    });
+    return grouped;
+  }, [classData?.timetable]);
 
   if (isLoading) {
     return <div className="animate-pulse bg-gray-200 h-64 rounded-xl"></div>;
@@ -234,45 +249,11 @@ export default function ClassDetail() {
                 <Plus className="w-4 h-4 mr-1" /> Add Slot
               </Button>
             </CardHeader>
-            <CardBody className="p-0">
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      {['Day', 'Time', 'Subject', 'Teacher', ''].map(h => (
-                        <th key={h} className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">{h}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-100">
-                    {classData.timetable?.map(slot => (
-                      <tr key={slot.id}>
-                        <td className="px-6 py-4 text-sm font-medium text-gray-900">{slot.dayOfWeek}</td>
-                        <td className="px-6 py-4 text-sm text-gray-600">
-                          {slot.startTime} - {slot.endTime}
-                        </td>
-                        <td className="px-6 py-4 text-sm font-medium text-indigo-600">{slot.subject}</td>
-                        <td className="px-6 py-4 text-sm text-gray-500">{slot.teacherName || 'TBA'}</td>
-                        <td className="px-6 py-4 text-right text-sm font-medium">
-                          <button 
-                            onClick={() => deleteTimetableMutation.mutate(slot.id)}
-                            className="text-gray-400 hover:text-red-600 transition-colors"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                    {(!classData.timetable || classData.timetable.length === 0) && (
-                      <tr>
-                        <td colSpan="5" className="px-6 py-12 text-center text-sm text-gray-500">
-                          No timetable entries yet.
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
+            <CardBody>
+              <TimetableGrid
+                timetable={timetableByDay}
+                onDelete={(slotId) => deleteTimetableMutation.mutate(slotId)}
+              />
             </CardBody>
           </Card>
         </div>

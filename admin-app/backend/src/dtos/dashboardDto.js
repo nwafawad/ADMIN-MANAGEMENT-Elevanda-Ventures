@@ -13,6 +13,13 @@ const toDashboardDto = (stats) => {
     pendingTransactions: stats.pendingTransactions || 0,
     unverifiedDevices: stats.unverifiedDevices || 0,
     attendanceRate: stats.attendanceRate || 0,
+    attendanceSummary: stats.attendanceSummary || {
+      total: 0,
+      present: 0,
+      absent: 0,
+      late: 0,
+      attendanceRate: 0,
+    },
     recentTransactions: stats.recentTransactions || [],
     recentRegistrations: stats.recentRegistrations || [],
   };

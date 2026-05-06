@@ -10,7 +10,7 @@ import Input from '../components/ui/Input';
 import { formatDate } from '../utils/formatDate';
 import { formatCurrency } from '../utils/formatCurrency';
 import { gradeColorMap } from '../utils/gradeCompute';
-import { ArrowLeft, User, ShieldCheck, ShieldAlert, GraduationCap, Users } from 'lucide-react';
+import { ArrowLeft, School, ShieldCheck, ShieldAlert, GraduationCap, Users } from 'lucide-react';
 
 export default function UserDetail() {
   const { id } = useParams();

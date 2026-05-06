@@ -1,17 +1,12 @@
-export const formatDate = (dateString, showTime = false) => {
-  if (!dateString) return 'N/A';
-  
-  const options = {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  };
+import { format, parseISO, isValid } from 'date-fns';
 
-  if (showTime) {
-    options.hour = '2-digit';
-    options.minute = '2-digit';
-  }
+export const formatDate = (dateValue, showTime = false) => {
+  if (!dateValue) return 'N/A';
 
-  return new Intl.DateTimeFormat('en-US', options).format(new Date(dateString));
+  const date = typeof dateValue === 'string' ? parseISO(dateValue) : new Date(dateValue);
+  if (!isValid(date)) return 'N/A';
+
+  return format(date, showTime ? 'MMM d, yyyy, h:mm a' : 'MMM d, yyyy');
 };
-export const formatDateTime = (dateString) => formatDate(dateString, true);
+
+export const formatDateTime = (dateValue) => formatDate(dateValue, true);

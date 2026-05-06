@@ -9,6 +9,7 @@ const colorStyles = {
   amber: 'border-t-amber-500 text-amber-600 bg-amber-50',
   red: 'border-t-red-500 text-red-600 bg-red-50',
   indigo: 'border-t-indigo-500 text-indigo-600 bg-indigo-50',
+  gray: 'border-t-gray-500 text-gray-600 bg-gray-50',
 };
 
 export default function StatCard({ title, value, icon, color = 'blue' }) {

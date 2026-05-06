@@ -20,7 +20,7 @@ export default function RecentActivityFeed({ transactions, registrations }) {
               <Link to="/fees" className="text-xs text-primary-600 hover:text-primary-700 font-medium">View all</Link>
             </div>
             <div className="space-y-4">
-              {transactions.length === 0 ? (
+              {!transactions || transactions.length === 0 ? (
                 <p className="text-sm text-gray-400">No recent transactions</p>
               ) : (
                 transactions.map((tx) => (
@@ -50,7 +50,7 @@ export default function RecentActivityFeed({ transactions, registrations }) {
               <Link to="/users" className="text-xs text-primary-600 hover:text-primary-700 font-medium">View all</Link>
             </div>
             <div className="space-y-4">
-              {registrations.length === 0 ? (
+              {!registrations || registrations.length === 0 ? (
                 <p className="text-sm text-gray-400">No recent registrations</p>
               ) : (
                 registrations.map((user) => (
